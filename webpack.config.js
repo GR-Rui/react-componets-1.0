@@ -14,7 +14,9 @@ var deps = [
 //重定向文件
 var alias= {
   Base          : components_dir + 'Base/Base.js',
-  Loadmore      : components_dir + 'Loadmore/Loadmore.js'
+  Loadmore      : components_dir + 'Loadmore/Loadmore.js',
+  Dropdown      : components_dir + 'Dropdown/Dropdown.js',
+  SignIn        : components_dir + 'SignIn/SignIn.js'
 };
 
 config = {
@@ -25,12 +27,13 @@ config = {
     './src/index'
   ],
   output: {
-    path: path.join(__dirname, 'dist'),
+    path: path.join(__dirname, 'dist/'),
     filename: 'bundle.js',
     publicPath: '/static/'
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin(),
+    new webpack.NoErrorsPlugin()
   ],
   resolve: {
     alias: []
@@ -40,7 +43,9 @@ config = {
     loaders: [{
       test: /\.js$/,
       loaders: ['react-hot', 'babel'],
-      include: path.join(__dirname, 'src')
+      include: [
+        path.join(__dirname,'components'),path.join(__dirname,'features')
+      ]
     },{
       test: /\.css$/,
       exclude: [
@@ -51,11 +56,11 @@ config = {
   }
 };
 
-// //加载 alias项
-// deps.forEach(function (dep) {
-//   var depPath = path.resolve(node_modules_dir, dep);
-//   config.module.noParse.push(depPath);
-// });
+//加载 alias项
+deps.forEach(function (dep) {
+  var depPath = path.resolve(node_modules_dir, dep);
+  config.module.noParse.push(depPath);
+});
 
 //重定向文件赋值
 config.resolve.alias = alias;
